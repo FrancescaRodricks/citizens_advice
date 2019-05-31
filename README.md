@@ -1,25 +1,26 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+rspec spec --format documentation
 
-Things you may want to cover:
+Api::V1::UsersController
+  POST #register
+    creates a new user
+    when a user with the same email ID already exists
+      returns http bad request
+      returns an error message in the response
+    when the params are all blank
+      returns http bad request
+      returns an error message in the response for all the fields
 
-* Ruby version
+User
+  is valid with valid attributes
+  is not valid without an email
+  when validating for unique email
+    when no user exists with the same email
+      is valid
+    when a user exists with the same email
+      is not valid
 
-* System dependencies
+Finished in 0.07481 seconds (files took 1.1 seconds to load)
+9 examples, 0 failures
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-=======
