@@ -1,5 +1,14 @@
 # README
+```sh
+User Registration 
 
+curl -X POST \
+  http://localhost:3001/api/v1/auth/register \
+  -H 'Accept: application/hal+json,application/json' \
+  -F email=john.doe@example.com \
+  -F password=qwerty123 \
+  -F username=john
+```
 
 ```sh
 rspec spec --format documentation
