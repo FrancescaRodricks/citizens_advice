@@ -1,5 +1,7 @@
 # README
 
+
+```sh
 rspec spec --format documentation
 
 Api::V1::UsersController
@@ -23,4 +25,5 @@ User
 
 Finished in 0.07481 seconds (files took 1.1 seconds to load)
 9 examples, 0 failures
+```
 
