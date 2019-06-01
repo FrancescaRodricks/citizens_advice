@@ -41,4 +41,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
   end
+
+  describe 'POST #login' do
+
+  end
 end
