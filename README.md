@@ -11,7 +11,33 @@ curl -X POST \
 ```
 
 ```sh
-rspec spec --format documentation
+AuthTokenValidator
+  #valid_token?
+    when the token is not present
+      should raise AuthTokenValidator::RequiredParamsValidationError
+    when the token is present
+      and it has not expired
+        returns true
+      and it has expired
+        returns true
+      and it cannot be decoded
+        raises an error
+  refresh_token
+    when the token is more than 2 hours old
+      raises an ExpiredToken error
+    when the token is less that 2 hours old
+      is exchanged for a fresh user token
+
+Authentication
+  authenticate
+    when required params are present
+      returns a user
+    when username is not present
+      raises RequiredParamsValidationError
+    when password is not present
+      raises RequiredParamsValidationError
+  generate_token
+    returns a JWT token
 
 Api::V1::UsersController
   POST #register
@@ -23,6 +49,12 @@ Api::V1::UsersController
       returns http bad request
       returns an error message in the response for all the fields
 
+JsonWebToken
+  .encode
+    returns a token of length 105 characters
+  .decode
+    decodes the token and returns the correct user id
+
 User
   is valid with valid attributes
   is not valid without an email
@@ -32,8 +64,8 @@ User
     when a user exists with the same email
       is not valid
 
-Finished in 0.07481 seconds (files took 1.1 seconds to load)
-9 examples, 0 failures
+Finished in 0.19491 seconds (files took 1.74 seconds to load)
+21 examples, 0 failures
 ```
 
 ```sh
