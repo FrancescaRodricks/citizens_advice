@@ -55,3 +55,14 @@ curl -X POST \
   -F username=john.doe
 ```
 
+```sh
+Create a new group
+
+curl -X POST \
+  http://localhost:3001/api/v1/groups \
+  -H 'Accept: application/hal+json,application/json' \
+  -H 'token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo2LCJleHAiOjE1NTk0MTEwMTV9.bbeHlvtO4mVi4Px474NlICd0XRkXr14b3qO9ptAcl9k' \
+  -F password=test \
+  -F username=test1 \
+  -F 'name=test group 3'
+```
