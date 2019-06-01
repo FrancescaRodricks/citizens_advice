@@ -108,3 +108,10 @@ curl -X POST \
   -F username=test1 \
   -F 'name=test group 3'
 ```
+
+### Not Attempted Tasks:
+* Assign users to groups. 
+* With a valid user token, other applications need to be able to supply a 
+username or email address to request the user’s details (username, email 
+address and group memberships). 
+
