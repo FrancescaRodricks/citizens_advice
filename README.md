@@ -1,16 +1,17 @@
 # README
+### How to setup the app and get started 
 ```sh
-User Registration 
-
-curl -X POST \
-  http://localhost:3001/api/v1/auth/register \
-  -H 'Accept: application/hal+json,application/json' \
-  -F email=john.doe@example.com \
-  -F password=qwerty123 \
-  -F username=john
+bundle install
+rake db:create
+rake db:migrate
+rake db:seed
+rspec spec --format documentation
+rails s
 ```
 
 ```sh
+rspec spec --format documentation
+
 AuthTokenValidator
   #valid_token?
     when the token is not present
@@ -67,6 +68,16 @@ User
 Finished in 0.19491 seconds (files took 1.74 seconds to load)
 21 examples, 0 failures
 ```
+```sh
+User Registration 
+
+curl -X POST \
+  http://localhost:3001/api/v1/auth/register \
+  -H 'Accept: application/hal+json,application/json' \
+  -F email=john.doe@example.com \
+  -F password=qwerty123 \
+  -F username=john
+```
 
 ```sh
 User Refresh Token 
@@ -75,7 +86,6 @@ curl -X PUT \
   -H 'Accept: application/hal+json,application/json' \
   -F token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo2LCJleHAiOjE1NTk0MDYwNzJ9.a-NPvOA8x7kpa3i54AL7KLvvBRU-BYK8P1EBK0xrNY8
 ```
-
 
 ```sh
 User authenticate with username and password
