@@ -4,7 +4,7 @@
 bundle install
 rake db:create
 rake db:migrate
-rake db:seed
+rake db:seed (cteates 2 users - one admin and the other a non admin user )
 rspec spec --format documentation
 rails s
 ```
@@ -40,6 +40,14 @@ Authentication
   generate_token
     returns a JWT token
 
+Api::V1::GroupsController
+  POST create
+    when the token is valid
+      and the user is an admin
+        creates a new group
+    when the token is not valid
+      raises an unauthorized error
+
 Api::V1::UsersController
   POST #register
     creates a new user
@@ -49,6 +57,21 @@ Api::V1::UsersController
     when the params are all blank
       returns http bad request
       returns an error message in the response for all the fields
+  POST #login
+    when the user exists
+      and the params are valid
+        returns a token in the response
+      and the username is not present in the request params
+        returns an error message
+      and the password is not present in the request params
+        returns an error message
+    when the user doesnt exist
+      returns an error message
+  PUT #refresh_token
+    when the token is less than 2 hours old
+      generates a new token
+    when the token is more than 2 hours old
+      raises an error
 
 JsonWebToken
   .encode
@@ -65,8 +88,9 @@ User
     when a user exists with the same email
       is not valid
 
-Finished in 0.19491 seconds (files took 1.74 seconds to load)
-21 examples, 0 failures
+Finished in 0.20923 seconds (files took 1.24 seconds to load)
+29 examples, 0 failures
+
 ```
 ```sh
 User Registration 
@@ -80,14 +104,6 @@ curl -X POST \
 ```
 
 ```sh
-User Refresh Token 
-curl -X PUT \
-  http://localhost:3001/api/v1/auth/refresh \
-  -H 'Accept: application/hal+json,application/json' \
-  -F token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo2LCJleHAiOjE1NTk0MDYwNzJ9.a-NPvOA8x7kpa3i54AL7KLvvBRU-BYK8P1EBK0xrNY8
-```
-
-```sh
 User authenticate with username and password
 
 curl -X POST \
@@ -95,6 +111,14 @@ curl -X POST \
   -H 'Accept: application/hal+json,application/json' \
   -F password=qwerty123 \
   -F username=john.doe
+```
+
+```sh
+User Refresh Token 
+curl -X PUT \
+  http://localhost:3001/api/v1/auth/refresh \
+  -H 'Accept: application/hal+json,application/json' \
+  -F token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo2LCJleHAiOjE1NTk0MDYwNzJ9.a-NPvOA8x7kpa3i54AL7KLvvBRU-BYK8P1EBK0xrNY8
 ```
 
 ```sh
@@ -108,6 +132,20 @@ curl -X POST \
   -F username=test1 \
   -F 'name=test group 3'
 ```
+### Attempted Tasks:
+* Users need to be able to register with a username, email address and 
+password (there is no need to send a confirmation email). 
+* Users need to be able to authenticate with their username and password. 
+* When a user is successfully authenticated, the API needs to respond with 
+a unique user token. 
+* User tokens are valid for 1 hour. 
+* The API also needs to allow a user token that is up to 2 hours old to be 
+exchanged for a fresh user token. 
+* Groups have a unique name and can have many users and users can 
+belong to many groups. 
+* Some users have admin privileges and they need to be able to carry out 
+the following actions using a valid user token: 
+  * Create groups.
 
 ### Not Attempted Tasks:
 * Assign users to groups. 
