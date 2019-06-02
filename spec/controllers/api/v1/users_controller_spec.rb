@@ -12,6 +12,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when a user with the same email ID already exists' do
+      let!(:user)  { create(:user, username: params[:username], email: params[:email], password: params[:password]) }
+
       before { subject }
 
       it 'returns http bad request' do
@@ -86,7 +88,29 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'PUT #refresh_token' do
+    let!(:user) { create(:user, username: 'test user refresh', email: 'test.user.refresh@example.com', password: 'test213') }
+    let(:user_id) { user.id }
 
+    subject { post :refresh_token , params: token }
 
+    context 'when the token is less than 2 hours old' do
+      let(:token) { { token: JsonWebToken.encode({ user_id: user_id }, 1.hours.ago) } }
+
+      before { subject }
+
+      it 'generates a new token' do
+        expect(JSON.parse(response.body)['token']).to_not eq(token[:token])
+      end
+    end
+
+    context 'when the token is more than 2 hours old' do
+      let(:token) { { token: JsonWebToken.encode({user_id: user_id }, 4.hours.ago) } }
+
+      before { subject }
+
+      it 'raises an error' do
+        expect(JSON.parse(response.body)['message']).to eq('Token cannot be refreshed. Minimum time to refresh token has passed')
+      end
+    end
   end
 end
