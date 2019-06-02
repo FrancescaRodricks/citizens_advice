@@ -19,6 +19,7 @@ class Api::V1::GroupsController < ApplicationController
   end
 
   def user_groups
+    # TODO assign users to a group
   end
 
   private

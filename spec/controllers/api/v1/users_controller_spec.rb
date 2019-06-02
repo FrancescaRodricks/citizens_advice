@@ -43,6 +43,50 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'POST #login' do
+    let(:user) { create(:user, username: 'test user', email: 'test.user@example.com', password: 'test213') }
+
+    subject { post :login , params: params }
+
+    before { subject }
+
+    context 'when the user exists' do
+
+      context 'and the params are valid' do
+        let(:params) { { username: user.username, password: user.password } }
+
+        it 'returns a token in the response' do
+          expect(JSON.parse(response.body)["token"]).to_not be_empty
+        end
+      end
+
+      context 'and the username is not present in the request params' do
+        let(:params) { { password: 'test213'} }
+
+        it 'returns an error message' do
+          expect(JSON.parse(response.body)["message"]).to eq('Username cannot be blank')
+        end
+      end
+
+      context 'and the password is not present in the request params' do
+        let(:params) { { username: 'test user'} }
+
+        it 'returns an error message' do
+          expect(JSON.parse(response.body)["message"]).to eq('Password cannot be blank')
+        end
+      end
+
+    end
+    context 'when the user doesnt exist' do
+      let(:params) { { username: 'test user', password: 'test password'} }
+
+      it 'returns an error message' do
+        expect(JSON.parse(response.body)["message"]).to eq('User not found for given username and password')
+      end
+    end
+  end
+
+  describe 'PUT #refresh_token' do
+
 
   end
 end
